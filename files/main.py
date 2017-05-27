@@ -21,7 +21,9 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
         self.player = Player(self)
+        # self.player2 = Player(self)
         self.all_sprites.add(self.player)
+        # self.all_sprites.add(self.player2)
         for plat in PLATFORM_LIST:
             p = Platform(*plat)
             self.all_sprites.add(p)
@@ -47,6 +49,13 @@ class Game:
             if hits:
                 self.player.pos.y = hits[0].rect.top + 1
                 self.player.vel.y = 0
+                """
+        if self.player2.vel.y  > 0:
+            hits = pg.sprite.spritecollide(self.player2, self.platforms, False)
+            if hits:
+                self.player2.pos.y = hits[0].rect.top + 1
+                self.player2.vel.y = 0
+                """
 
     def events(self):
         # game loop - events
@@ -59,10 +68,16 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == JUMP_BUT or event.key == JUMP_BUT2:
                     self.player.jump()
+                    """
+            if event.type == pg.KEYDOWN:
+                if event.key == JUMP_BUT2:
+                    self.player2.jump()
+                    """
 
     def draw(self):
         # game loop - draw
-        self.screen.fill(BLACK)
+        self.image = pg.image.load(os.path.join(img_folder, "bg5.jpg")).convert()
+        self.screen.blit(self.image, [-400, 0])
         self.all_sprites.draw(self.screen)
         # always flip after drawing everything
         pg.display.flip()
