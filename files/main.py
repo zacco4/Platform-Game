@@ -1,5 +1,3 @@
-# Platform game
-
 import pygame as pg
 import random
 from settings import *
@@ -7,13 +5,12 @@ from sprites import *
 
 class Game:
     def __init__(self):
-        # initialise game windows, etc
+        # Initialize the game window etc
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
-
         self.running = True
 
     def new(self):
@@ -21,17 +18,19 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
         self.player = Player(self)
-        # self.player2 = Player(self)
         self.all_sprites.add(self.player)
-        # self.all_sprites.add(self.player2)
-        for plat in PLATFORM_LIST:
-            p = Platform(*plat)
-            self.all_sprites.add(p)
-            self.platforms.add(p)
+
+        p1 = Platform(0, HEIGHT - 40, WIDTH, 40)
+        self.all_sprites.add(p1)
+        self.platforms.add(p1)
+        p2 = Platform(WIDTH / 2 - 60, HEIGHT * 3 / 4, 150, 30)
+        self.all_sprites.add(p2)
+        self.platforms.add(p2)
+
         self.run()
 
     def run(self):
-        # game loop
+        # Game Loop
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
@@ -41,56 +40,51 @@ class Game:
 
 
     def update(self):
-        # game loop - update
+        # Update Game Loop
         self.all_sprites.update()
-        # check if player hits platform - only if falling
-        if self.player.vel.y  > 0:
+
+        # hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+        # if hits and self.player.vel.y > 0:
+        #     if self.player.pos.y - 41 == hits[0].rect.bottom:
+        #         self.player.vel.y = 0
+        #         self.player.pos.y = hits[0].rect.bottom + PLAYER_HEIGHT
+
+        if self.player.vel.y > 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
                 self.player.pos.y = hits[0].rect.top + 1
                 self.player.vel.y = 0
-                """
-        if self.player2.vel.y  > 0:
-            hits = pg.sprite.spritecollide(self.player2, self.platforms, False)
+        elif self.player.vel.y < 0:
+            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
-                self.player2.pos.y = hits[0].rect.top + 1
-                self.player2.vel.y = 0
-                """
+                self.player.pos.y = hits[0].rect.bottom + PLAYER_HEIGHT
+                self.player.vel.y = 0
+                
 
     def events(self):
-        # game loop - events
+        # Game loop events
         for event in pg.event.get():
-            # check if close window is pressed
             if event.type == pg.QUIT:
                 if self.playing:
                     self.playing = False
                 self.running = False
             if event.type == pg.KEYDOWN:
-                if event.key == JUMP_BUT or event.key == JUMP_BUT2:
+                if event.key == pg.K_SPACE:
                     self.player.jump()
-                    """
-            if event.type == pg.KEYDOWN:
-                if event.key == JUMP_BUT2:
-                    self.player2.jump()
-                    """
 
     def draw(self):
-        # game loop - draw
-        self.image = pg.image.load(os.path.join(img_folder, "bg5.jpg")).convert()
-        self.screen.blit(self.image, [-400, 0])
+        # Draw game
+        self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
-        # always flip after drawing everything
         pg.display.flip()
 
     def show_start_screen(self):
-        # start screen
+        # show start screen
         pass
 
     def show_go_screen(self):
-        # game over / continue
+        # show game over screen
         pass
-
-
 
 g = Game()
 g.show_start_screen()
