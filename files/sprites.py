@@ -33,9 +33,11 @@ class Player(pg.sprite.Sprite):
 		self.vel += self.acc
 		self.pos += self.vel + 0.5 * self.acc
 		if self.pos.x > WIDTH:
-			self.pos.x = 0
-		if self.pos.x < 0:
-			self.pos.x = WIDTH
+			self.pos.x = WIDTH - PLAYER_WIDTH
+			self.vel.x = 2
+		if self.pos.x < PLAYER_WIDTH / 2:
+			self.pos.x = PLAYER_WIDTH / 2
+			self.vel.x = 2
 
 		self.rect.midbottom = self.pos
 

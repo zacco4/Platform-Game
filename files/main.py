@@ -20,12 +20,10 @@ class Game:
         self.player = Player(self)
         self.all_sprites.add(self.player)
 
-        p1 = Platform(0, HEIGHT - 40, WIDTH, 40)
-        self.all_sprites.add(p1)
-        self.platforms.add(p1)
-        p2 = Platform(WIDTH / 2 - 60, HEIGHT * 3 / 4, 150, 30)
-        self.all_sprites.add(p2)
-        self.platforms.add(p2)
+        for plat in PLATFORM_LIST:
+            p = Platform(*plat)
+            self.all_sprites.add(p)
+            self.platforms.add(p)
 
         self.run()
 
@@ -59,6 +57,11 @@ class Game:
             if hits:
                 self.player.pos.y = hits[0].rect.bottom + PLAYER_HEIGHT
                 self.player.vel.y = 0
+
+        if self.player.rect.right >= WIDTH / 4 * 3:
+            self.player.pos.x -= abs(self.player.vel.x)
+            for plat in self.platforms:
+                plat.rect.x -= abs(self.player.vel.x)
                 
 
     def events(self):
