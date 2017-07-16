@@ -52,6 +52,7 @@ class Game:
             if hits:
                 self.player.pos.y = hits[0].rect.top + 1
                 self.player.vel.y = 0
+
         elif self.player.vel.y < 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
@@ -63,7 +64,7 @@ class Game:
             for plat in self.platforms:
                 if plat.rect.top != 560:
                     plat.rect.x -= abs(self.player.vel.x)
-                    if plat.rect.x < 0 :
+                    if plat.rect.x + plat.rect.width < 0 :
                         plat.kill()                      
                         platformAdd = Platform(randint(WIDTH, WIDTH * 2), randint(0, HEIGHT - 140), randint(40, 100), randint(40, 60))
                         self.all_sprites.add(platformAdd)
