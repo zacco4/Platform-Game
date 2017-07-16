@@ -58,10 +58,14 @@ class Game:
                 self.player.pos.y = hits[0].rect.bottom + PLAYER_HEIGHT
                 self.player.vel.y = 0
 
-        if self.player.rect.right >= WIDTH / 4 * 3:
+        if self.player.rect.left >= WIDTH / 5 * 4:
             self.player.pos.x -= abs(self.player.vel.x)
             for plat in self.platforms:
-                plat.rect.x -= abs(self.player.vel.x)
+                if plat.rect.top != 560:
+                    plat.rect.x -= abs(self.player.vel.x)
+                    if plat.rect.x < 0 :
+                        plat.kill()                      
+
                 
 
     def events(self):
