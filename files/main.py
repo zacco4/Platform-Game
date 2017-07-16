@@ -65,6 +65,9 @@ class Game:
                     plat.rect.x -= abs(self.player.vel.x)
                     if plat.rect.x < 0 :
                         plat.kill()                      
+                        platformAdd = Platform(randint(WIDTH, WIDTH * 2), randint(0, HEIGHT - 140), randint(40, 100), randint(40, 60))
+                        self.all_sprites.add(platformAdd)
+                        self.platforms.add(platformAdd)
 
                 
 

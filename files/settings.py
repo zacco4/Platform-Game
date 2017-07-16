@@ -14,8 +14,8 @@ JUMP_HEIGHT = 15
 
 PLATFORM_LIST = [(0, HEIGHT - 40, WIDTH, 40)]
 
-for i in range(3):
-	PLATFORM_LIST.append((randint(0, WIDTH), randint(0, HEIGHT - 41), randint(40, 100), randint(40, 60)))
+for i in range(6):
+	PLATFORM_LIST.append((randint(0, WIDTH), randint(0, HEIGHT - 140), randint(40, 100), randint(40, 60)))
 
 
 
