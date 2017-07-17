@@ -1,3 +1,5 @@
+# MAIN
+
 import pygame as pg
 import random
 from settings import *
@@ -41,32 +43,56 @@ class Game:
         # Update Game Loop
         self.all_sprites.update()
 
-        # hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-        # if hits and self.player.vel.y > 0:
-        #     if self.player.pos.y - 41 == hits[0].rect.bottom:
-        #         self.player.vel.y = 0
-        #         self.player.pos.y = hits[0].rect.bottom + PLAYER_HEIGHT
+        # COLLISION DETECTION
 
+        # If player is falling
         if self.player.vel.y > 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
-                self.player.pos.y = hits[0].rect.top + 1
-                self.player.vel.y = 0
+                # If standing on top of the platforms, don't go through
+                if self.player.rect.right > hits[0].rect.left and self.player.rect.left < hits[0].rect.right and self.player.pos.x + PLAYER_WIDTH / 2 - 8 > hits[0].rect.left and self.player.pos.x - PLAYER_WIDTH / 2 + 2 < hits[0].rect.right:
+                    self.player.pos.y = hits[0].rect.top + 1
+                    self.player.vel.y = 0
 
+                # If player is coming from a side, keep it there
+                else:
+                    if self.player.vel.x > 0 and self.player.pos.x + PLAYER_WIDTH / 2 - 5 <= hits[0].rect.left:
+                        self.player.pos.x = hits[0].rect.left - PLAYER_WIDTH / 2
+                        self.player.vel.x = 0
+                    elif self.player.vel.x < 0 and self.player.pos.x - PLAYER_WIDTH / 2 + 5 >= hits[0].rect.right:
+                        self.player.pos.x = hits[0].rect.right + PLAYER_WIDTH / 2
+                        self.player.vel.x = 0
+
+        # If player is jumping
         elif self.player.vel.y < 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
-                self.player.pos.y = hits[0].rect.bottom + PLAYER_HEIGHT
-                self.player.vel.y = 0
+                if self.player.pos.x + PLAYER_WIDTH / 2 - 6 > hits[0].rect.left and self.player.pos.x - PLAYER_WIDTH / 2 + 6 < hits[0].rect.right:
+                # If player hits bottom of platform, go down
+                    self.player.pos.y = hits[0].rect.bottom + PLAYER_HEIGHT
+                    self.player.vel.y = 0
 
+                else:
+                    if self.player.vel.x > 0:
+                        self.player.pos.x = hits[0].rect.left - PLAYER_WIDTH / 2
+                        self.player.vel.x = 0
+                    elif self.player.vel.x < 0:
+                        self.player.pos.x = hits[0].rect.right + PLAYER_WIDTH / 2 
+                        self.player.vel.x = 0
+
+        # If player reaches 4 fiths across the screen
         if self.player.rect.left >= WIDTH / 5 * 4:
+            # Move the player to the left
             self.player.pos.x -= abs(self.player.vel.x)
+            # Move all platforms to the left
             for plat in self.platforms:
                 if plat.rect.top != 560:
-                    plat.rect.x -= abs(self.player.vel.x)
-                    if plat.rect.x + plat.rect.width < 0 :
+                    plat.rect.x -= abs(self.player.vel.x + PLATFORMS_MOVING_FASTER)
+                    if plat.rect.x + plat.rect.width < 0:
+                        # Despawn the platforms not in sight
                         plat.kill()                      
-                        platformAdd = Platform(randint(WIDTH, WIDTH * 2), randint(0, HEIGHT - 140), randint(40, 100), randint(40, 60))
+                        # Create new platforms
+                        platformAdd = Platform(randint(WIDTH, WIDTH * 2), randint(0, HEIGHT - 140), randint(40, 100), 20)
                         self.all_sprites.add(platformAdd)
                         self.platforms.add(platformAdd)
 

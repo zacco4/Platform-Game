@@ -1,3 +1,5 @@
+# SPRITES
+
 import pygame as pg
 from settings import *
 from random import randint
@@ -23,7 +25,7 @@ class Player(pg.sprite.Sprite):
 			self.vel.y = -JUMP_HEIGHT
 
 	def update(self):
-		self. acc = vec(0, PLAYER_GRAV)
+		self.acc = vec(0, PLAYER_GRAV)
 		keys = pg.key.get_pressed()
 		if keys[pg.K_a]:
 			self.acc.x = -PLAYER_ACC
@@ -46,7 +48,7 @@ class Platform(pg.sprite.Sprite):
 	def __init__(self, x, y, w, h):
 		pg.sprite.Sprite.__init__(self)
 		self.image = pg.Surface((w, h))
-		self.image.fill((randint(1, 255), randint(1, 255), randint(1, 255)))
+		self.image.fill((randint(10, 255), randint(10, 255), randint(10, 255)))
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
