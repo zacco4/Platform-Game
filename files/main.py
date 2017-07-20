@@ -1,5 +1,7 @@
 # MAIN
 
+DELETE THIS CODE TO RUN
+
 import pygame as pg
 import random
 from settings import *
