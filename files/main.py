@@ -87,12 +87,12 @@ class Game:
             # Move all platforms to the left
             for plat in self.platforms:
                 if plat.rect.top != 560:
-                    plat.rect.x -= abs(self.player.vel.x + PLATFORMS_MOVING_FASTER)
+                    plat.rect.x -= abs(self.player.vel.x * PLATFORMS_MOVING_FASTER)
                     if plat.rect.x + plat.rect.width < 0:
                         # Despawn the platforms not in sight
                         plat.kill()                      
                         # Create new platforms
-                        platformAdd = Platform(randint(WIDTH, WIDTH * 2), randint(0, HEIGHT - 140), randint(40, 100), 20)
+                        platformAdd = Platform(randint(WIDTH, WIDTH * 2), randint(PLATFORM_Y_1, PLATFORM_Y_2), PLATFORM_X_LENGTH, PLATFORM_Y_LENGTH)
                         self.all_sprites.add(platformAdd)
                         self.platforms.add(platformAdd)
 
@@ -111,7 +111,7 @@ class Game:
 
     def draw(self):
         # Draw game
-        self.screen.fill(BLACK)
+        self.screen.fill((randint(0, 255), randint(0, 255), randint(0, 255)))
         self.all_sprites.draw(self.screen)
         pg.display.flip()
 
